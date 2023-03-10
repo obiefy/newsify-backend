@@ -2,8 +2,8 @@
 
 namespace App\News;
 
-interface NewsInterface {
-    
+interface NewsInterface
+{
     public static function make(): static;
 
     public function url(): string;
@@ -21,5 +21,4 @@ interface NewsInterface {
     public function format(array $articles): array;
 
     public function publicationDate(string $date): string;
-    
 }

@@ -4,21 +4,24 @@ namespace App\news\Services;
 
 use App\News\NewsService;
 
-class NewYorkTimes extends NewsService {
-
-    public static function make(): static {
+class NewYorkTimes extends NewsService
+{
+    public static function make(): static
+    {
         return (new static)->withParams('api-key', config('services.new-york-times.key'));
     }
 
-    public function url(): string {
+    public function url(): string
+    {
         return config('services.new-york-times.url').'/articlesearch.json';
     }
 
     public function format(array $data): array
     {
-        if(!isset($data['response']['docs'])) {
+        if (! isset($data['response']['docs'])) {
             return [];
         }
+
         return collect($data['response']['docs'])->map(function ($article) {
             return [
                 'platform' => static::class,

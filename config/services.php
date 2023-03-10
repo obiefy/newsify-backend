@@ -37,6 +37,6 @@ return [
     'new-york-times' => [
         'url' => env('NEW_YORK_TIMES_URL'),
         'key' => env('NEW_YORK_TIMES_KEY'),
-    ]
+    ],
 
 ];
