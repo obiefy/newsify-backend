@@ -19,6 +19,10 @@ class NewsApi implements NewsServiceInterface
         if (isset($filters['keyword'])) {
             $query['q'] = $filters['keyword'];
         }
+        if (isset($filters['date'])) {
+            $query['from'] = formatDate($filters['date']);
+            $query['to'] = formatDate($filters['date']);
+        }
         
         $urlSuffix = '/top-headlines';
         if(count($filters) > 0) {
@@ -44,7 +48,7 @@ class NewsApi implements NewsServiceInterface
             return [
                 'platform' => static::class,
                 'title' => $article['title'],
-                'publishedAt' => formatDate($article['publishedAt']),
+                'publishedAt' => diffForHumans($article['publishedAt']),
                 'author' => $article['author'],
                 'source' => $article['source']['name'],
                 'description' => $article['description'],

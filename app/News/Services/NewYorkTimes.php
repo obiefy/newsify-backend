@@ -17,13 +17,17 @@ class NewYorkTimes implements NewsServiceInterface
         if (isset($filters['keyword'])) {
             $query['q'] = $filters['keyword'];
         }
+        if (isset($filters['date'])) {
+            $query['begin_date'] = formatDate($filters['date']);
+            $query['end_date'] = formatDate($filters['date']);
+        }
 
         $response = Http::acceptJson()
             ->get(config('services.new-york-times.url').'/articlesearch.json', $query)
             ->json();
 
-        if(isset($response['fault']['faultstring'])) {
-            $error = $response['fault']['faultstring'];
+        if($response['status'] !== 'OK') {
+            $error = $response['fault']['faultstring'] ?? $response['status'];
         } else {
             $data = (new static)->format($response['response']['docs']);
         }
@@ -37,9 +41,9 @@ class NewYorkTimes implements NewsServiceInterface
             return [
                 'platform' => static::class,
                 'title' => $article['headline']['main'],
-                'publishedAt' => formatDate($article['pub_date']),
+                'publishedAt' => diffForHumans($article['pub_date']),
                 'author' => str($article['byline']['original'])->replace('By ', '')->toString(),
-                'source' => $article['source'],
+                'source' => $article['source'] ?? null,
                 'description' => $article['snippet'],
                 'cover' => null,
             ];
