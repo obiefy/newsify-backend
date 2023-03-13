@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [NewsController::class, 'feed']);
-Route::get('/search', [NewsController::class, 'search']);
+Route::get('/', [NewsController::class, 'index']);
+Route::get('/feed', [NewsController::class, 'feed']);
 
 require __DIR__.'/auth.php';

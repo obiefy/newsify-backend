@@ -2,34 +2,49 @@
 
 namespace App\News\Services;
 
-use App\News\NewsService;
+use Illuminate\Support\Facades\Http;
 
-class NewsApi extends NewsService
+class NewsApi implements NewsServiceInterface
 {
-    public static function make(): static
+    public static function news(array $filters): array
     {
-        return (new static)
-            ->withParams('apiKey', config('services.news-api.key'))
-            ->withParams('language', 'en')
-            ->withParams('pageSize', 10);
-    }
+        $error = null;
+        $data = [];
 
-    public function url(): string
-    {
-        return config('services.news-api.url').'/everything';
-    }
-
-    public function format(array $data): array
-    {
-        if (! isset($data['articles'])) {
-            return [];
+        $query = [
+            'apiKey' => config('services.news-api.key'),
+            'language' =>  'en',
+            'pageSize' =>  10,
+        ];
+        if (isset($filters['keyword'])) {
+            $query['q'] = $filters['keyword'];
+        }
+        
+        $urlSuffix = '/top-headlines';
+        if(count($filters) > 0) {
+            $urlSuffix = '/everything';
         }
 
-        return collect($data['articles'])->map(function ($article) {
+        $response = Http::acceptJson()
+            ->get(config('services.news-api.url').$urlSuffix, $query)
+            ->json();
+        
+        if($response['status'] !== 'ok') {
+            $error = $response['message'];
+        } else {
+            $data = (new static)->format($response['articles']);
+        }
+
+        return [$error, $data];
+    }
+
+    public function format(array $articles): array
+    {
+        return collect($articles)->map(function ($article) {
             return [
                 'platform' => static::class,
                 'title' => $article['title'],
-                'publishedAt' => $this->publicationDate($article['publishedAt']),
+                'publishedAt' => formatDate($article['publishedAt']),
                 'author' => $article['author'],
                 'source' => $article['source']['name'],
                 'description' => $article['description'],

@@ -2,31 +2,42 @@
 
 namespace App\news\Services;
 
-use App\News\NewsService;
+use Illuminate\Support\Facades\Http;
 
-class NewYorkTimes extends NewsService
+class NewYorkTimes implements NewsServiceInterface
 {
-    public static function make(): static
+    public static function news(array $filters): array
     {
-        return (new static)->withParams('api-key', config('services.new-york-times.key'));
-    }
+        $error = null;
+        $data = [];
 
-    public function url(): string
-    {
-        return config('services.new-york-times.url').'/articlesearch.json';
-    }
-
-    public function format(array $data): array
-    {
-        if (! isset($data['response']['docs'])) {
-            return [];
+        $query = [
+            'api-key' => config('services.new-york-times.key'),
+        ];
+        if (isset($filters['keyword'])) {
+            $query['q'] = $filters['keyword'];
         }
 
-        return collect($data['response']['docs'])->map(function ($article) {
+        $response = Http::acceptJson()
+            ->get(config('services.new-york-times.url').'/articlesearch.json', $query)
+            ->json();
+
+        if(isset($response['fault']['faultstring'])) {
+            $error = $response['fault']['faultstring'];
+        } else {
+            $data = (new static)->format($response['response']['docs']);
+        }
+
+        return [$error, $data];
+    }
+
+    public function format(array $articles): array
+    {
+        return collect($articles)->map(function ($article) {
             return [
                 'platform' => static::class,
                 'title' => $article['headline']['main'],
-                'publishedAt' => $this->publicationDate($article['pub_date']),
+                'publishedAt' => formatDate($article['pub_date']),
                 'author' => str($article['byline']['original'])->replace('By ', '')->toString(),
                 'source' => $article['source'],
                 'description' => $article['snippet'],
