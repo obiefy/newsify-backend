@@ -1,12 +1,12 @@
 <?php
 
-namespace App\news\Services;
+namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 
 class NewYorkTimes implements NewsServiceInterface
 {
-    public static function news(array $filters): array
+    public static function news(array $filters = []): array
     {
         $error = null;
         $data = [];

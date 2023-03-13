@@ -1,9 +1,9 @@
 <?php
 
-namespace App\News;
+namespace App\Repositories;
 
 use App\Models\User;
-use App\News\Services\NewsServiceInterface;
+use App\Services\NewsServiceInterface;
 
 interface NewsRepositoryInterface
 {
@@ -11,5 +11,5 @@ interface NewsRepositoryInterface
 
     public function getNews(array $filters = []): array;
 
-    public function getNewsFrom(NewsServiceInterface $service, array $filters = []);
+    public function getNewsFrom(NewsServiceInterface $service, array $filters = []): array;
 }

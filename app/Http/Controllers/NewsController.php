@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\News\NewsCollector;
-use App\News\NewsRepositoryInterface;
+use App\Repositories\NewsRepositoryInterface;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller

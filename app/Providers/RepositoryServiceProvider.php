@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\News\NewsRepository;
-use App\News\NewsRepositoryInterface;
+use App\Repositories\NewsRepository;
+use App\Repositories\NewsRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider

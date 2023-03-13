@@ -1,11 +1,11 @@
 <?php
 
-namespace App\News;
+namespace App\Repositories;
 
 use App\Models\User;
-use App\News\Services\NewsApi;
-use App\News\Services\NewsServiceInterface;
-use App\news\Services\NewYorkTimes;
+use App\Services\NewsApi;
+use App\Services\NewsServiceInterface;
+use App\Services\NewYorkTimes;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -48,7 +48,7 @@ class NewsRepository implements NewsRepositoryInterface
         return $news;
     }
 
-    public function getNewsFrom(NewsServiceInterface $service, array $filters = [])
+    public function getNewsFrom(NewsServiceInterface $service, array $filters = []): array
     {
         return $service->news($filters);
     }
