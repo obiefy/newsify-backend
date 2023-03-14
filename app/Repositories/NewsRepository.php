@@ -7,7 +7,6 @@ use App\Services\NewsApi;
 use App\Services\NewsServiceInterface;
 use App\Services\NewYorkTimes;
 use Exception;
-use Illuminate\Support\Collection;
 
 class NewsRepository implements NewsRepositoryInterface
 {
