@@ -44,7 +44,7 @@ class NewsRepository implements NewsRepositoryInterface
             throw new Exception('Service is not available, please try again later') ;
         }
 
-        return $news;
+        return collect($news)->shuffle()->toArray();
     }
 
     public function getNewsFrom(NewsServiceInterface $service, array $filters = []): array
