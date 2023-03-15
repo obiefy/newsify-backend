@@ -25,6 +25,22 @@ class NewsRepository implements NewsRepositoryInterface
         return [];
     }
 
+    public function getFilters(): array
+    {
+        $categories = [];
+        $sources = [];
+
+        foreach ($this->services as $service) {
+            $categories = [...$categories, ...$service->categories()];
+            $sources = [...$sources, ...$service->sources()];
+        }
+
+        return [
+            'categories' => collect($categories)->unique()->toArray(),
+            'sources' => collect($sources)->unique()->toArray(),
+        ];
+    }
+
     public function getNews(array $filters = []): array
     {
         $errors = [];

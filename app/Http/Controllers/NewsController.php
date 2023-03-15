@@ -24,4 +24,16 @@ class NewsController extends Controller
             return $this->error($e->getMessage());
         }
     }
+
+    public function filters()
+    {
+        try {
+
+            $filters = $this->repository->getFilters();
+
+            return $this->ok($filters);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
 }
