@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\NewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/news', [NewsController::class, 'index']);
 Route::get('/filters', [NewsController::class, 'filters']);
 Route:: get('/feed', [NewsController::class, 'feed'])->middleware(['auth:sanctum']);
+Route:: post('/follow', FollowController::class)->middleware(['auth:sanctum']);
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();

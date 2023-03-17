@@ -38,5 +38,9 @@ return [
         'url' => env('NEW_YORK_TIMES_URL'),
         'key' => env('NEW_YORK_TIMES_KEY'),
     ],
+    'the-guardian' => [
+        'url' => env('THE_GUARDIAN_URL'),
+        'key' => env('THE_GUARDIAN_KEY'),
+    ],
 
 ];

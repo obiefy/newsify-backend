@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\NewsApi;
 use App\Services\NewsServiceInterface;
 use App\Services\NewYorkTimes;
+use App\Services\TheGuardian;
 use Exception;
 
 class NewsRepository implements NewsRepositoryInterface
@@ -17,6 +18,7 @@ class NewsRepository implements NewsRepositoryInterface
         $this->services = [
             new NewsApi,
             new NewYorkTimes,
+            new TheGuardian,
         ];
     }
 
@@ -27,13 +29,16 @@ class NewsRepository implements NewsRepositoryInterface
 
     public function getFilters(): array
     {
-        $categories = [];
-        $sources = [];
+        [$categories, $sources] = cache()->remember('categories', now()->addDay(), function () {
+            $categories = [];
+            $sources = [];
+            foreach ($this->services as $service) {
+                $categories = [...$categories, ...$service->categories()];
+                $sources = [...$sources, ...$service->sources()];
+            }
 
-        foreach ($this->services as $service) {
-            $categories = [...$categories, ...$service->categories()];
-            $sources = [...$sources, ...$service->sources()];
-        }
+            return [$categories, $sources];
+        });
 
         return [
             'categories' => collect($categories)->unique()->toArray(),
