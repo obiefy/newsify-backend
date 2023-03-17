@@ -25,6 +25,25 @@ class NewsController extends Controller
         }
     }
 
+    public function feed(Request $request)
+    {
+        try {
+            $filters = [];
+            $user = $request->user();
+            if($user->categories) {
+                $filters['category'] = implode(',', $user->categories);
+            }
+            if($user->sources) {
+                $filters['source'] = implode(',', $user->sources);
+            }
+            $news = $this->repository->getNews($filters);
+
+            return $this->ok($news);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
     public function filters()
     {
         try {

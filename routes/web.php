@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\NewsController;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +11,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [NewsController::class, 'index']);
-Route::get('/filters', [NewsController::class, 'filters']);
-Route::get('/feed', [NewsController::class, 'feed']);
 
 require __DIR__.'/auth.php';

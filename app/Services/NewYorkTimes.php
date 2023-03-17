@@ -48,7 +48,7 @@ class NewYorkTimes implements NewsServiceInterface
 
             $fq[] = 'source:("'. $sources .'")';
         }
-        $query['fq'] = implode(' AND ', $fq);
+        $query['fq'] = implode(' OR ', $fq);
 
         return $query;
     }
