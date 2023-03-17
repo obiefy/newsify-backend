@@ -41,7 +41,7 @@ class NewsRepository implements NewsRepositoryInterface
         });
 
         return [
-            'categories' => collect($categories)->unique()->toArray(),
+            'categories' => collect($categories)->unique()->values()->toArray(),
             'sources' => collect($sources)->unique()->toArray(),
         ];
     }
